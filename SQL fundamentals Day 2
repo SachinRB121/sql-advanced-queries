@@ -74,3 +74,153 @@ SELECT * FROM bookstemp;
 SHOW TABLEs;
 
 DROP TABLE IF EXISTS bookstemp;
+
+-- Drop existing tables (if they exist)
+DROP TABLE IF EXISTS BorrowedBooks;
+DROP TABLE IF EXISTS Books;
+DROP TABLE IF EXISTS Authors;
+DROP TABLE IF EXISTS Members;
+
+-- BOOKS TABLE
+CREATE TABLE Books 
+(
+	BookID INT primary key,
+    Title VARCHAR(255),
+    Author VARCHAR(255),
+    Genre VARCHAR(100),
+    PublishedYear INT,
+    Price DECIMAL(5,2)
+);
+
+INSERT INTO books
+values 
+(1, 'The Catcher in the Rye', 'J.D. Salinger', 'Fiction', 1951, 10.99),
+(2, 'To Kill a Mockingbird', 'Harper Lee', 'Fiction', 1960, 12.49),
+(3, '1984', 'George Orwell', 'Dystopian', 1949, 15.99),
+(4, 'Pride and Prejudice', 'Jane Austen', 'Romance', 1813, 8.99),
+(5, 'Moby Dick', 'Herman Melville', 'Adventure', 1851, 18.99),
+(6, 'War and Peace', 'Leo Tolstoy', 'Historical Fiction', 1869, 20.99),
+(7, 'The Great Gatsby', 'F. Scott Fitzgerald', 'Classics', 1925, 14.49),
+(8, 'Brave New World', 'Aldous Huxley', 'Dystopian', 1932, 13.49),
+(9, 'The Hobbit', 'J.R.R. Tolkien', 'Fantasy', 1937, 11.49),
+(10, 'The Lord of the Rings', 'J.R.R. Tolkien', 'Fantasy', 1954, 25.99),
+(11, 'Catch-22', 'Joseph Heller', 'Satire', 1961, 17.99),
+(12, 'Fahrenheit 451', 'Ray Bradbury', 'Dystopian', 1953, 16.99),
+(13, 'The Odyssey', 'Homer', 'Epic', 800, 9.99),
+(14, 'Crime and Punishment', 'Fyodor Dostoevsky', 'Psychological Fiction', 1866, 19.49),
+(15, 'Frankenstein', 'Mary Shelley', 'Horror', 1818, 10.99),
+(16, 'The Picture of Dorian Gray', 'Oscar Wilde', 'Gothic', 1890, 14.99),
+(17, null, 'Bram Stoker', 'Horror', 1897, 13.99),
+(18, 'The Shining', 'Stephen King', 'Horror', 1977, 22.99),
+(19, 'The Silent Patient', 'Alex Michaelides', null, 2019, 19.99),
+(20, 'The Alchemist', 'Paulo Coelho', 'Philosophical', 1988, 16.49),
+(21, 'The Girl on the Train', 'Paula Hawkins', 'Thriller', 2015, 14.99),
+(22, 'The Da Vinci Code', 'Dan Brown', 'Mystery', 2003, 18.49),
+(23, 'The Hunger Games', 'Suzanne Collins', 'Dystopian', 2008, 13.99),
+(24, 'A Game of Thrones', 'George R.R. Martin', 'Fantasy', 1996, 24.99),
+(25, 'Harry Potter and the Sorcerer\'s Stone', 'J.K. Rowling', 'Fantasy', 1997, 19.99),
+(26, 'A Brief History of Time', 'Stephen Hawking', 'Non-fiction', 1988, 25.99),
+(27, 'Sapiens: A Brief History of Humankind', 'Yuval Noah Harari', 'Non-fiction', 2011, 22.99),
+(28, 'Educated', 'Tara Westover', 'Memoir', 2018, 14.49),
+(29, null, 'Michelle Obama', 'Biography', 2018, 18.99),
+(30, 'The Subtle Art of Not Giving a F*ck', 'Mark Manson', 'Self-help', 2016, 15.99),
+(31, 'Atomic Habits', 'James Clear', 'Self-help', 2018, 16.99),
+(32, 'Dare to Lead', 'Brené Brown', 'Self-help', 2018, 17.99),
+(33, 'Outliers', 'Malcolm Gladwell', 'Non-fiction', 2008, 18.99),
+(34, 'The Power of Habit', 'Charles Duhigg', 'Self-help', 2012, null),
+(35, 'The Art of War', 'Sun Tzu', 'Philosophy', 5, 10.49),
+(36, 'Meditations', 'Marcus Aurelius', 'Philosophy', 180, 12.99),
+(37, 'The 48 Laws of Power', 'Robert Greene', 'Self-help', 1998, null),
+(38, 'The Road', 'Cormac McCarthy', 'Dystopian', 2006, 18.49),
+(39, 'Shogun', 'James Clavell', 'Historical Fiction', 1975, 23.99),
+(40, 'A Tale of Two Cities', 'Charles Dickens', 'Historical Fiction', 1859, 15.99),
+(41, 'The Outsiders', 'S.E. Hinton', 'Fiction', null, 12.49),
+(42, 'The Bell Jar', 'Sylvia Plath', 'Fiction', 1963, 13.99),
+(43, 'The Secret History', 'Donna Tartt', 'Mystery', 1992, 20.49),
+(44, 'The Night Circus', 'Erin Morgenstern', 'Fantasy', 2011, 24.99),
+(45, 'The Book Thief', 'Markus Zusak', 'Historical Fiction', 2005, 16.49),
+(46, 'Little Women', 'Louisa May Alcott', 'Fiction', 1868, 14.49),
+(47, 'The Kite Runner', 'Khaled Hosseini', 'Drama', 2003, 19.49),
+(48, 'The Handmaid\'s Tale', 'Margaret Atwood', 'Dystopian', 1985, 17.99),
+(49, 'The Godfather', 'Mario Puzo', 'Crime', 1969, 22.99),
+(50, 'The Hunger Games: Catching Fire', 'Suzanne Collins', 'Dystopian', 2009, null);
+
+
+CREATE TABLE AUTHORS 
+(
+	AuthorID INT primary KEY,
+    Name VARCHAR(255) NOT null,
+    Nationality VARCHAR(100),
+    BirthYear INT,
+    DeathYear INT
+);
+
+-- INSERT AUTHOR RECORDS
+INSERT INTO AUTHORS
+VALUES
+(1, 'J.D. SALINGER', 'AMERICAN', 1919, 2010),
+(2, 'HARPER LEE', 'AMERICAN', 1926, 2016),
+(3, 'GEORGE ORWELL', 'BRITISH', 1903, 1950),
+(4, 'JANE AUSTEN', 'BRITISH', 1775, 1817),
+(5, 'HERMAN MELVILLE', 'AMERICAN', 1819, 1891),
+(6, 'ALDOUS HUXLEY', 'BRITISH', 1894, 1963),
+(7, 'J.R.R. TOLKIEN', 'BRITISH', 1892, 1973),
+(8, 'F. SCOTT FITZGERALD', 'AMERICAN', 1896, 1940),
+(9, 'RAY BRADBURY', 'AMERICAN', 1920, 2012),
+(10, 'PAULO COELHO', 'BRAZILIAN', 1947, NULL);
+
+-- CREATE MEMBERS TABLE
+CREATE TABLE MEMBERS 
+(
+	MEMBERID INT PRIMARY KEY,
+    FIRSTNAME VARCHAR(100) NOT NULL,
+    LASTNAME VARCHAR(100) NOT NULL,
+    EMAIL VARCHAR(100) UNIQUE NOT NULL,
+    JOINDATE DATE NOT NULL
+);
+
+-- INSERT INTO MEMBERS
+INSERT INTO MEMBERS
+VALUES
+(1, 'ALICE', 'JOHNSON', 'ALICE.JOHNSON@EXAMPLE.COM', '2022-05-01'),
+(2, 'BOB', 'SMITH', 'BOB.SMITH@EXAMPLE.COM', '2021-03-11'),
+(3, 'CHARLIE', 'BROWN', 'CHARLIE.BROWN@EXAMPLE.COM', '2020-06-07'),
+(4, 'DAVID', 'MILLER', 'DAVID.MILLER@EXAMPLE.COM', '2021-07-20'),
+(5, 'EVA', 'DAVIS', 'EVA.DAVIS@EXAMPLE.COM', '2023-01-22'),
+(6, 'FRANK', 'THOMAS', 'FRANK.THOMAS@EXAMPLE.COM', '2022-11-05'),
+(7, 'GRACE', 'WILSON', 'GRACE.WILSON@EXAMPLE.COM', '2020-10-17'),
+(8, 'HENRY', 'MOORE', 'HENRY.MOORE@EXAMPLE.COM', '2021-08-25'),
+(9, 'IVY', 'TAYLOR', 'IVY.TAYLOR@EXAMPLE.COM', '2023-02-15'),
+(10, 'JACK', 'ANDERSON', 'JACK.ANDERSON@EXAMPLE.COM', '2022-09-30');
+
+
+-- Create BorrowedBooks Table
+CREATE TABLE BorrowedBooks 
+(
+	BorrowID INT primary key auto_increment,
+    MemberID INT,
+    BookID INT,
+    BorrowDATE date not null,
+    ReturnDate date null,
+    foreign key (MemberID) references Members(MemberID),
+    foreign key (BookID) references Books(BookID)
+);
+
+INSERT INTO borrowedbooks (MemberID, BookID, BorrowDate, ReturnDate)
+VALUES
+(1, 1, '2023-03-01', NULL),
+(2, 2, '2022-08-15', '2022-09-01'),
+(3, 3, '2022-06-07', NULL),
+(4, 4, '2023-02-20', '2023-03-05'),
+(5, 5, '2022-01-22', NULL),
+(6, 6, '2022-11-05', '2022-11-15'),
+(7, 7, '2020-10-17', NULL),
+(8, 8, '2021-08-25', '2021-09-10'),
+(9, 9, '2023-02-15', NULL),
+(10, 10, '2022-09-30', NULL);
+
+
+
+
+
+
