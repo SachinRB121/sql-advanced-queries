@@ -1,3 +1,3 @@
-# This Is the SQL FUNDAMENTALS Files
+# SQL Fundamentals Files
   Day Wise Practice Files
 
