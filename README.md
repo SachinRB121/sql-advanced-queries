@@ -1,2 +1,3 @@
-# sql-advanced-queries
-Your best SQL — window functions, CTEs etc
+# This Is the SQL FUNDAMENTALS Files
+  Day Wise Practice Files
+
