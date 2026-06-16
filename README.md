@@ -1,3 +1,2 @@
-# SQL Fundamentals Files
-  Day Wise Practice Files
+# The Ultimate Guide to SQL
 
