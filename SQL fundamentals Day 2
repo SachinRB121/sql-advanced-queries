@@ -220,7 +220,247 @@ VALUES
 (10, 10, '2022-09-30', NULL);
 
 
+-- Day 2 
 
+SELECT * FROM books;
+
+SELECT * FROM bookstemp;
+
+insert into bookstemp
+values
+(1,'Martin Luther', 'MJ', 'Biography', 1990);
+
+-- Adding new column in table ('price')
+
+ALTER TABLE bookstemp
+ADD COLUMN price DECIMAL(5,2);
+
+
+UPDATE bookstemp
+SET price = 19.97
+WHERE bookid = 1;
+
+
+ALTER TABLE bookstemp
+RENAME COLUMN autohor TO Author;
+
+
+UPDATE bookstemp
+SET price = 20.89
+WHERE PublishedYear < 1900;
+
+
+-- update the existing books with prices
+UPDATE bookstemp SET price = 12.88 WHERE BookID = 1;
+UPDATE bookstemp SET price = 14.00 WHERE BookID = 2;
+UPDATE bookstemp SET price = 29.99 WHERE BookID = 3;
+UPDATE bookstemp SET price = 20.89 WHERE BookID = 4;
+UPDATE bookstemp SET price = 17.37 WHERE BookID = 5;
+
+
+-- RETRIVE THE DATA FROM TABLES
+SELECT * FROM bookstemp;
+
+
+-- specific columns
+SELECT  title, price
+FROM bookstemp; 
+
+-- TYPES OF KEYS IN DATABASE
+-- 1. PRIMARY KEY: A primary key used to uniquely identify the each record of 
+-- table, 
+-- Properties : it must contain the unique values
+
+
+-- trying to insert duplicate data 
+
+INSERT INTO bookstemp 
+VALUES 
+(1,'Martin','Ronald', 'Sci-Fi', 2002, 34.99);
+
+
+SELECT * FROM bookstemp;
+
+
+-- 2 FOREIGN KEY : A Foreign Key is a fielt (a collection of fields) in one 
+-- table that refers to the primary key in another table.
+-- it establishes a relationship between two tables.
+
+-- 3) UNIQUE KEY : a unique key ensures that all the values in a column are 
+-- different, but allows NULL values.
+
+-- 4) COMPOSITE KEY: Composite key combines tow or more columns to form a 
+-- unique identifies for a record.
+
+
+SHOW TABLEs;
+
+DROP TABLE IF EXISTS bookstemp;
+
+
+-- Filtering the data with WHERE clause
+-- Find all sci-fi books 
+
+SELECT * FROM books WHERE Genre = "Historical Fiction";
+
+-- Find books written by George Orwell
+SELECT  * FROM books WHERE author ="George Orwell";
+
+
+-- Exclude Data (<> or !=) 
+-- find all books writtent by J.K.Rowling
+
+SELECT * FROM Books WHERE Author <> "J.K.Rowling";
+
+-- FIND all books not in the fiction genre
+SELECT * FROM books where genre != "Fiction";
+
+
+-- FILTERING BY NUMERIC VALUES (<, > >=, <=)
+
+-- find the  book that cost more than $15
+SELECT * FROM books WHERE price > 15;
+
+--  find the  book that cost less than $15
+SELECT * FROM books WHERE price < 15;
+
+
+-- FILTERING BY PARTIAL MATCHES (LIKE) 
+-- Find books with "Harry" anywhere in the title
+SELECT * FROM books WHERE title LIKE "%Harry%";
+
+
+-- Find books where author name satarts with 'J'
+SELECT * FROM books WHERE author like "J%";
+
+-- Filtering With Muliple Condition (AND & OR) 
+-- Find horror Books published after 1950
+SELECT * FROM books WHERE Genre = "Horror" AND PublishedYear > 1950;
+
+-- Find books that are either sicence fiction or fantasy
+SELECT * FROM books WHERE Genre = "Fiction" OR  Genre = "Fantasy";
+
+-- find books under $10 and published year before 2010
+SELECT * FROM books WHERE price < 10 AND PublishedYear < 2010;
+
+
+-- sortint data - ORDER BY 
+-- Scenario : You want to see all books sorted by title in ascending order
+-- (A-Z)
+
+SELECT  * FROM books ORDER BY title ASC;
+
+-- Scenatrio : You want to see all books by published year in descending order
+SELECT * FROM books ORDER BY PublishedYear desc;
+
+-- Scenario : You want to find books pulished after 2000, But you want to see
+-- the most expensive ones first.
+
+SELECT * FROM books WHERE PublishedYear > 2000 ORDER BY price DESC;
+
+-- SORT BY MULTIPLE COLUMNS 
+SELECT * FROM books ORDER BY Author, Title;
+
+
+-- LIMITING RESULTS
+-- You want to see only the first 5 rows from the books table
+SELECT * FROM books LIMIT 5;
+
+-- You want to find the 3 most recently published books.
+SELECT * FROM books ORDER BY PublishedYear DESC limit 3;
+
+
+-- Scenario: you want to find the cheepest book in the library
+SELECT * FROM books WHERE Price IS NOT NULL ORDER BY price LIMIT 1;
+
+
+-- USING DISTINCT - FINDING UNIQUE VALUES
+-- Scenario : you want to find all qunique genres available in your library
+
+SELECT DISTINCT Genre FROM books;
+
+-- you want a list of all unique authors and genre pairs.
+
+SELECT DISTINCT Genre, Author FROM books;
+
+-- Distinct with count
+-- Scenario : You want to count how many different genre exist in your library
+SELECT COUNT(DISTINCT genre) AS unique_genre FROM books;
+
+-- Aggregation in SQL (Summarizing the data)
+-- Aggregate function perform calculations on multiple rows and return a single output.
+
+-- Scenario : You want to count how many books are in library
+SELECT COUNT(*) AS Total_books FROM books;
+
+-- Scenario: The total price of all books in library
+SELECT SUM(Price)Total_book_cost FROM books;
+
+-- Senario: you want to find the most expensive and cheapest books
+SELECT MAX(price) as mostexpensive_price, MIN(price) as cheppest_price
+FROM books;
+
+
+-- GROUP BY CLAUSE
+-- The group by clause groups rows with identical values in a specific column
+-- and applies aggregate function to each group.
+-- Scenario : You want to count how many books are available in each genre
+
+SELECT Genre, COUNT(*) AS TotalBooks FROM books
+GROUP BY Genre;
+
+
+-- Scenario : You want to find the avg price of books by each genre
+
+SELECT Genre , AVG(Price) AS AvgPrice FROM books
+GROUP BY Genre;
+
+-- HAVING CLAUSE 
+-- Scenario : you want to find the genres that have more than 3 books.
+
+SELECT 
+	Genre, 
+    COUNT(*) as Totalcount 
+FROM 
+	books
+GROUP BY 
+	Genre
+HAVING 
+	COUNT(*) > 2; 
+
+
+-- Filter before grouping use WHERE clause
+-- Filter after grouping use HAVING clause
+
+-- Scenario : He want you to find genre where the avg price of books is > $20
+
+SELECT 
+	Genre , 
+    AVG(price) as AvgPrice
+FROM 
+	books
+GROUP BY
+	Genre
+HAVING
+	AVG(price) > 20;
+    
+-- Scenario : A publisher want to focus on high performance authors who write 
+-- premium-priced books.
+-- your task is:
+-- 1. Find authors who have written more than 1 book.
+-- 2. For each of those authors, show avg price of their books.
+-- 3. Find genres where the avg price exeeds $15
+
+SELECT
+	author,
+    Genre,
+    COUNT(*) AS total_book_published,
+    AVG(Price) as avgprice
+FROM 
+	books
+GROUP BY 
+	Author,Genre
+HAVING COUNT(*) > 1 AND AVG(price) > 15;
 
 
 
