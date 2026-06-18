@@ -1,0 +1,162 @@
+-- Day 3 
+
+-- SUB QUERY
+-- imagine you want to find the most expensive book 
+SELECT * FROM books WHERE price = (SELECT max(price) FROM books);
+
+-- Multi-row subquery
+-- Find all book belonging to either the "fiction" or "Horror"
+
+SELECT * FROM BOOKS 
+WHERE Genre IN (SELECT genre FROM books WHERE genre IN ("Fiction", "Horror"));
+
+-- Calculate the avg price of books by genre
+SELECT 
+	genre, 
+	AVG(totalprice) as totalprice
+FROM 
+(SELECT 
+	genre,
+	SUM(price) AS totalprice 
+FROM 
+	books 
+GROUP BY 
+	genre
+) as genretotal
+GROUP BY 
+	Genre;  
+
+-- INNER JOIN
+-- to find the books along with their authors
+SELECT 
+	b.title,
+    a.Name as Author
+FROM
+	books b
+INNER JOIN
+	authors a
+ON b.author = a.Name;
+
+-- LEFT JOIN
+-- Get the list of all the books and their borrowers, even if no one has
+-- borrowed a books yet.
+
+SELECT 
+	b.title,
+    m.FirstName,
+    m.LastName
+FROM
+	books b
+LEFT JOIN
+	members m
+ON b.BookID = m.MEMBERID;
+
+-- CROSS JOIN
+-- to see every possible combination of members and books table
+-- 50
+-- 10
+SELECT 
+	* 
+FROM
+	members
+CROSS JOIN
+	books;
+
+
+-- SET OPERATIONS WITH TWO TABLES
+-- UNION (Without duplicate)
+SELECT
+	title, genre
+FROM 
+	books
+WHERE Genre = 'Fiction'
+UNION
+SELECT
+	title, genre
+FROM 
+	books
+WHERE Genre = 'Horror';
+
+
+-- UNION ALL (Keeps the duplicate values)
+
+SELECT name FROM authors
+UNION 
+SELECT author FROM books;
+
+SELECT name FROM authors
+UNION ALL
+SELECT author FROM books;
+
+
+-- INTERSECT would gives tou only rows that appears in both result set.
+-- EXCEPT gives rows in the first set that aren't in the second.
+ 
+-- CASE WHEN 
+
+SELECT 
+	*,
+    CASE 
+		WHEN price <=10 THEN "Affordable"
+        WHEN price <=15 THEN "Mid-Range"
+        ELSE "Expensive"
+	END AS PriceCategory
+FROM
+	books;
+
+-- Classify books based on price and published year
+
+SELECT 
+	*,
+    CASE 
+		WHEN price <=10 THEN "Affordable"
+        WHEN price <=15 THEN "Mid-Range"
+        ELSE "Expensive"
+	END AS PriceCategory,
+    CASE
+		WHEN PublishedYear <= 1950 THEN "Classic"
+        WHEN PublishedYear BETWEEN 1951 AND 2000 THEN "Modern"
+        ELSE "Contemporary"
+	END AS Era
+FROM
+	books;
+
+
+-- NESTED 
+SELECT
+	*,
+	CASE 
+		WHEN price <= 10 THEN
+			CASE
+				WHEN PublishedYear <= 1950 THEN "Classic & Cheep"
+                ELSE "Affordable & Cheep"
+			END
+		WHEN price BETWEEN 10 and 15 THEN "Affordable"
+        ELSE "Expensive"
+	END AS Category
+FROM 
+	books;
+
+
+
+-- nested case and subquery 
+SELECT 
+	Category, 
+    SUM(price) as Price
+FROM
+	(SELECT
+		*,
+		CASE 
+			WHEN price <= 10 THEN
+				CASE
+					WHEN PublishedYear <= 1950 THEN "Classic & Cheep"
+					ELSE "Affordable & Cheep"
+				END
+			WHEN price BETWEEN 10 and 15 THEN "Affordable"
+			ELSE "Expensive"
+		END AS Category
+	FROM 
+		books) AS A
+GROUP BY Category;
+
+-- End of Day 3 -- 
